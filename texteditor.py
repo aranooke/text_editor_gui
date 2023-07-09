@@ -6,18 +6,20 @@ Experiments with GUI :)
 
 
 import tkinter as tk
+from tkinter.scrolledtext import *
 from tkinter import filedialog,messagebox,simpledialog
 from tkinter import ttk,font
+import format_menu;
+from help import help
 import filesystem as fs;
 class App():
     def __init__(self) -> None:
         self.root = tk.Tk();
         self.file = fs.File("");
         self.root.title("Text editor");
-        self.text = tk.Text(self.root);
-        
-        self.text.grid(row = 0,column = 0);
-        self.text.pack();
+        self.text = ScrolledText(self.root, state='normal', height=400, width=400, wrap='word', pady=2, padx=3, undo=True)
+        self.text.pack(fill="y", expand=1)
+        self.text.focus_set()
         self.add_menu();
         self.binds();
         
@@ -54,6 +56,11 @@ class App():
         settings_menu = tk.Menu(mainmenu,tearoff=0);
         settings_menu.add_command(label = "Font info",command=settings_menu);
         mainmenu.add_cascade(label= "Settings",menu = settings_menu);
+
+        format_menu.main(self.root,self.text,mainmenu);
+
+        helpmenu = tk.Menu(mainmenu,tearoff=0);
+        helpmenu.add_command(label="Help information",command=help.main(self.root,"",mainmenu));
 
     def settings_menu(self):
         # chane font size of text
